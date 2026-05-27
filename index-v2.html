@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>CodePen - A Pen by Ka Wing Sosen (Bobby)</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESIGN STUDIO | LIVE PORTFOLIO</title>
+    <style>
+        /* ==========================================
+           全域視覺設定 (Global Style & Identity)
+           ========================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@300;500;700&display=swap');
+
+        :root {
+            --bg-color: #F9F9F6;          /* 日式暖米白 */
+            --text-color: #1A1A1A;        /* 曜岩黑 */
+            --accent-gold: #C5A880;       /* 霧金 */
+            --bg-dark: #111111;           /* 極致黑 */
+            --font-serif: 'Noto Serif TC', serif;
+            --font-sans: 'Noto Sans TC', sans-serif;
+            --transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color); color: var(--text-color);
+            font-family: var(--font-sans); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        /* ==========================================
+           響應式導覽列 (Responsive Navigation)
+           ========================================== */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem 4rem;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+            background-color: rgba(249, 249, 246, 0.85); backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+        
+        .logo-container { cursor: pointer; display: flex; align-items: center; }
+        .logo-text { font-family: var(--font-serif); font-weight: 700; letter-spacing: 4px; font-size: 1.4rem; }
+        .logo-img { height: 40px; width: auto; object-fit: contain; display: none; }
+
+        .nav-right { display: flex; align-items: center; gap: 4rem; }
+        .nav-links { display: flex; gap: 3rem; }
+        .nav-links span {
+            font-size: 0.9rem; letter-spacing: 2px; cursor: pointer; position: relative;
+            padding-bottom: 5px; opacity: 0.7; transition: var(--transition);
+        }
+        .nav-links span:hover, .nav-links span.active { opacity: 1; }
+        .nav-links span::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+            background-color: var(--text-color); transition: var(--transition);
+        }
+        .nav-links span:hover::after, .nav-links span.active::after { width: 100%; }
+        
+        .lang-switch {
+            font-family: var(--font-serif); font-size: 0.85rem; letter-spacing: 2px;
+            cursor: pointer; border: 1px solid var(--text-color); padding: 0.4rem 0.8rem; transition: var(--transition);
+        }
+        .lang-switch:hover { background-color: var(--text-color); color: var(--bg-color); }
+
+        /* 分頁與語系機制 */
+        .page { display: none; opacity: 0; transition: opacity 0.8s ease; padding-top: 100px; }
+        .page.active { display: block; opacity: 1; }
+        
+        body.lang-en .lang-zh { display: none !important; }
+        body:not(.lang-en) .lang-en { display: none !important; }
+
+        /* 樣式組件 */
+        .cta-btn {
+            display: inline-block; padding: 1.2rem 3rem; border: 1px solid var(--text-color);
+            background: transparent; color: var(--text-color); font-family: var(--font-serif);
+            text-decoration: none; letter-spacing: 2px; cursor: pointer; transition: var(--transition); margin-top: 2rem;
+        }
+        .cta-btn:hover { background-color: var(--text-color); color: var(--bg-color); transform: translateY(-5px); }
+        .section-title { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: 4px; margin-bottom: 1rem; }
+        .section-subtitle { font-size: 1rem; opacity: 0.5; letter-spacing: 2px; margin-bottom: 4rem; }
+
+        /* ==========================================
+           PAGE 1: HOMEPAGE 響應式排版
+           ========================================== */
+        .hero { height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 1.5rem; }
+        .hero h1 { font-family: var(--font-serif); font-size: clamp(1.5rem, 4vw, 3.5rem); line-height: 1.8; letter-spacing: 6px; font-weight: 300; }
+        
+        .dimensions-section { padding: 8rem 10vw; display: flex; flex-direction: row; gap: 5%; }
+        .dim-left { flex: 1; }
+        .dim-left h2 { position: sticky; top: 150px; font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.8rem); line-height: 1.4; }
+        .dim-right { flex: 1.2; display: flex; flex-direction: column; gap: 2rem; }
+        .dim-card { border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 2.5rem; transition: var(--transition); }
+        .dim-card h3 { font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: 1.5rem; }
+        .dim-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; opacity: 0.7; padding-left: 1rem; font-size: 0.95rem; }
+
+        .donut-preview-section { background-color: #1A1A1A; color: #F9F9F6; padding: 8rem 10vw; text-align: center; }
+        .donut-preview-section .section-subtitle { color: #F9F9F6; opacity: 0.6; }
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+        .preview-card { border: 1px solid rgba(255,255,255,0.1); padding: 3.5rem 1.5rem; transition: var(--transition); cursor: pointer; }
+        .preview-card:hover { background-color: rgba(255,255,255,0.05); border-color: var(--accent-gold); transform: translateY(-10px); }
+        .preview-card h4 { font-family: var(--font-serif); font-size: 1.2rem; letter-spacing: 2px; }
+        .donut-preview-section .cta-btn { border-color: #F9F9F6; color: #F9F9F6; }
+        .donut-preview-section .cta-btn:hover { background-color: #F9F9F6; color: #1A1A1A; }
+
+        /* ==========================================
+           PAGE 2: REAL PORTFOLIO 響應式排版
+           ========================================== */
+        .portfolio-container { padding: 4rem 10vw 8rem 10vw; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6rem 4rem; }
+        .portfolio-item { display: flex; flex-direction: column; cursor: pointer; text-decoration: none; color: inherit; }
+        .portfolio-item:nth-child(even) { margin-top: 6rem; }
+        .image-wrapper { width: 100%; height: clamp(300px, 40vh, 550px); background-color: #EAEAEA; position: relative; overflow: hidden; margin-bottom: 1.5rem; }
+        .portfolio-img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .portfolio-item:hover .portfolio-img { transform: scale(1.05); }
+        .item-info h3 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .item-info p { font-size: 0.85rem; opacity: 0.5; letter-spacing: 1px; }
+
+        /* 作品獨立詳細內頁 */
+        .project-detail-container { padding: 4rem 10vw 8rem 10vw; }
+        .back-btn { font-family: var(--font-serif); cursor: pointer; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 3rem; display: inline-block; opacity: 0.6; transition: var(--transition); }
+        .back-btn:hover { opacity: 1; transform: translateX(-5px); }
+        .detail-hero-wrapper { width: 100%; height: clamp(250px, 50vh, 60vh); background-color: #EAEAEA; margin-bottom: 4rem; overflow: hidden; }
+        .detail-hero-img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-content-box { display: flex; flex-direction: row; gap: 10%; align-items: flex-start; }
+        .detail-meta { flex: 1; position: sticky; top: 120px; }
+        .detail-meta h1 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: 2px; margin-bottom: 1rem; line-height: 1.3; }
+        .detail-meta p { font-size: 1rem; color: var(--accent-gold); letter-spacing: 1px; }
+        .detail-main-text { flex: 1.8; font-size: 1.05rem; line-height: 2; opacity: 0.85; letter-spacing: 1px; text-align: justify; }
+
+        /* ==========================================
+           PAGE 3: DONUT LAB 響應式排版
+           ========================================== */
+        .donut-lab-container { padding: 4rem 0 0 0; }
+        .market-section { min-height: 70vh; padding: 6rem 10vw; display: flex; flex-direction: row; align-items: center; gap: 4rem; }
+        .market-text { flex: 1; }
+        .market-visual { flex: 1.2; height: clamp(300px, 40vh, 450px); overflow: hidden; background: #EEE; }
+        .market-visual img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .market-health { background-color: #F4F1EA; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .market-custom { background-color: #EFF1F4; }
+        .market-premium { background-color: var(--bg-dark); color: #FFF; }
+        .market-premium h2 { color: var(--accent-gold); }
+        .market-mass { background-color: #FFFFFF; }
+        .lab-footer { text-align: center; padding: 8rem 2rem; background-color: var(--bg-color); }
+
+        /* ==========================================
+           PAGE 4: BOOKING 響應式排版
+           ========================================== */
+        .booking-container { padding: 4rem 10vw 8rem 10vw; display: flex; flex-direction: row; gap: 8%; }
+        .booking-left { flex: 1.2; }
+        .booking-left h2 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.8rem); line-height: 1.4; margin-bottom: 2rem; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; margin-bottom: 1.5rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        .booking-right {
+            flex: 1; background: #FFFFFF; padding: 4rem 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.01);
+            border: 1px solid rgba(0,0,0,0.03); text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .booking-right .submit-btn {
+            display: block; width: 100%; max-width: 280px; background-color: var(--text-color); color: var(--bg-color);
+            border: 1px solid var(--text-color); padding: 1.2rem; font-family: var(--font-serif); font-size: 1.1rem;
+            letter-spacing: 2px; cursor: pointer; text-decoration: none; transition: var(--transition); margin-top: 2rem;
+        }
+        .booking-right .submit-btn:hover { background-color: transparent; color: var(--text-color); transform: translateY(-5px); }
+        
+        .bg-decoration {
+            position: fixed; width: 400px; height: 400px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(197,168,128,0.05) 0%, rgba(0,0,0,0) 70%);
+            top: 20%; left: 10%; z-index: -1; pointer-events: none;
+        }
+        
+        #loader {
+            position: fixed; top:0; left:0; width:100%; height:100%; background:#F9F9F6;
+            display:flex; justify-content:center; align-items:center; z-index:9999;
+            font-family: var(--font-serif); letter-spacing: 4px; font-size: 1.2rem; transition: opacity 0.5s ease;
+        }
+
+        /* ==========================================
+           🚨 手機版與平板 RWD 斷點設定 (Media Queries)
+           ========================================== */
+        @media (max-width: 992px) {
+            nav { padding: 1.5rem 2rem; }
+            .nav-right { gap: 2rem; }
+            .nav-links { gap: 1.5rem; }
+            
+            /* 首頁三維度思考轉為上下垂直排版 */
+            .dimensions-section { flex-direction: column; gap: 4rem; padding: 6rem 6vw; }
+            .dim-left h2 { position: relative; top: 0; margin-bottom: 2rem; }
+            
+            /* 作品集轉為單欄展示，取消交錯高度 */
+            .portfolio-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .portfolio-item:nth-child(even) { margin-top: 0; }
+            
+            /* 作品詳細內頁轉單欄 */
+            .detail-content-box { flex-direction: column; gap: 3rem; }
+            .detail-meta { position: relative; top: 0; }
+            
+            /* 甜甜圈 4 大案例轉為上下直欄排版 */
+            .market-section { flex-direction: column !important; padding: 6rem 6vw; gap: 2.5rem; min-height: auto; }
+            .market-visual { width: 100%; height: 350px; }
+            
+            /* 線上預約轉上下直欄 */
+            .booking-container { flex-direction: column; gap: 4rem; padding: 4rem 6vw; }
+            .booking-right { padding: 4rem 1.5rem; }
+        }
+
+        @media (max-width: 576px) {
+            nav { padding: 1rem 1rem; }
+            .logo-text { font-size: 1.1rem; letter-spacing: 2px; }
+            .logo-img { height: 30px; }
+            .nav-links { gap: 0.8rem; }
+            .nav-links span { font-size: 0.75rem; letter-spacing: 1px; }
+            .lang-switch { padding: 0.3rem 0.5rem; font-size: 0.75rem; letter-spacing: 1px; }
+            
+            .hero h1 { line-height: 2; }
+            .preview-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .preview-card { padding: 2rem 1rem; }
+            .preview-card h4 { font-size: 1rem; }
+            
+            .cta-btn { width: 100%; text-align: center; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">LOADING STUDIO...</div>
+    <div class="bg-decoration"></div>
+
+    <nav>
+        <div class="logo-container" onclick="switchPage('homepage')" id="logo-box">
+            <span class="logo-text" id="logo-text-node">STUDIO.</span>
+            <img class="logo-img" id="logo-img-node" src="" alt="Brand Logo">
+        </div>
+        <div class="nav-right">
+            <div class="nav-links">
+                <span id="link-homepage" class="active" onclick="switchPage('homepage')">
+                    <span class="lang-zh">首頁</span><span class="lang-en">Home</span>
+                </span>
+                <span id="link-portfolio" onclick="switchPage('portfolio')">
+                    <span class="lang-zh">真實作品集</span><span class="lang-en">Portfolio</span>
+                </span>
+                <span id="link-donut-lab" onclick="switchPage('donut-lab')">
+                    <span class="lang-zh">甜甜圈實驗室</span><span class="lang-en">Donut Lab</span>
+                </span>
+                <span id="link-booking" onclick="switchPage('booking')">
+                    <span class="lang-zh">馬上行動</span><span class="lang-en">Action</span>
+                </span>
+            </div>
+            <div class="lang-switch" onclick="toggleLanguage()">EN</div>
+        </div>
+    </nav>
+
+    <div id="homepage" class="page active">
+        <section class="hero">
+            <h1 id="text-hero_title"></h1>
+            <p id="text-hero_scroll" style="margin-top: 2rem; opacity: 0.5; letter-spacing: 4px;"></p>
+        </section>
+
+        <section class="dimensions-section">
+            <div class="dim-left">
+                <h2 id="text-dim_title"></h2>
+            </div>
+            <div class="dim-right">
+                <div class="dim-card">
+                    <h3>📦 <span class="lang-zh">產品維度思考</span><span class="lang-en">Product Dimension</span></h3>
+                    <div id="text-dim_product"></div>
+                </div>
+                <div class="dim-card">
+                    <h3>📣 <span class="lang-zh">推廣維度思考</span><span class="lang-en">Promotion Dimension</span></h3>
+                    <div id="text-dim_promotion"></div>
+                </div>
+                <div class="dim-card">
+                    <h3>✨ <span class="lang-zh">品牌維度思考</span><span class="lang-en">Brand Dimension</span></h3>
+                    <div id="text-dim_brand"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="donut-preview-section">
+            <h2 class="section-title" id="text-donut_title"></h2>
+            <p class="section-subtitle" id="text-donut_subtitle"></p>
+            
+            <div class="preview-grid">
+                <div class="preview-card" onclick="switchPage('donut-lab')"><h4><span class="lang-zh">健康市場</span><span class="lang-en">Health</span></h4></div>
+                <div class="preview-card" onclick="switchPage('donut-lab')"><h4><span class="lang-zh">客製化市場</span><span class="lang-en">Custom</span></h4></div>
+                <div class="preview-card" onclick="switchPage('donut-lab')"><h4><span class="lang-zh">高端市場</span><span class="lang-en">Premium</span></h4></div>
+                <div class="preview-card" onclick="switchPage('donut-lab')"><h4><span class="lang-zh">低價市場</span><span class="lang-en">Mass Market</span></h4></div>
+            </div>
+            <button class="cta-btn" onclick="switchPage('donut-lab')">
+                <span class="lang-zh">探索甜甜圈的 4 種商業形態 →</span><span class="lang-en">Explore 4 Donut Cases →</span>
+            </button>
+        </section>
+    </div>
+
+    <div id="portfolio" class="page">
+        <div class="portfolio-container">
+            <h2 class="section-title lang-zh">精選真實案例</h2>
+            <h2 class="section-title lang-en">Selected Works</h2>
+            <p class="section-subtitle lang-zh">真實客戶案例 / 商業視覺實踐</p>
+            <p class="section-subtitle lang-en">Real Client Cases / Visual Practice</p>
+
+            <div class="portfolio-grid" id="dynamic-portfolio-grid"></div>
+        </div>
+    </div>
+
+    <div id="project-detail" class="page">
+        <div class="project-detail-container">
+            <div class="back-btn" onclick="switchPage('portfolio')">← BACK TO PORTFOLIO</div>
+            <div class="detail-hero-wrapper">
+                <img class="detail-hero-img" id="detail-hero-img" src="" alt="Project Hero">
+            </div>
+            <div class="detail-content-box">
+                <div class="detail-meta">
+                    <h1 id="detail-title">作品標題</h1>
+                    <p id="detail-tags">#Tags</p>
+                </div>
+                <div class="detail-main-text" id="detail-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="donut-lab" class="page">
+        <div class="donut-lab-container">
+            <div style="padding: 0 10vw;">
+                <h2>The Donut Lab</h2>
+                <p class="section-subtitle lang-zh">商業定位的視覺具現化（產品/推廣/品牌三維度示範）</p>
+                <p class="section-subtitle lang-en">Visualizing Business Positioning (Product / Promotion / Brand Demo)</p>
+            </div>
+
+            <section class="market-section market-health" id="donut-case-donut1">
+                <div class="market-text">
+                    <h2 class="section-title target-title">01 / 健康市場</h2>
+                    <p class="target-desc" style="opacity: 0.8; margin-top: 1rem; line-height: 1.8;"></p>
+                </div>
+                <div class="market-visual"><img class="target-img" src="" alt="Health"></div>
+            </section>
+
+            <section class="market-section market-custom" id="donut-case-donut2">
+                <div class="market-visual"><img class="target-img" src="" alt="Custom"></div>
+                <div class="market-text">
+                    <h2 class="section-title target-title">02 / 客製化市場</h2>
+                    <p class="target-desc" style="opacity: 0.8; margin-top: 1rem; line-height: 1.8;"></p>
+                </div>
+            </section>
+
+            <section class="market-section market-premium" id="donut-case-donut3">
+                <div class="market-text">
+                    <h2 class="section-title target-title">03 / 高端市場</h2>
+                    <p class="target-desc" style="opacity: 0.7; margin-top: 1rem; line-height: 1.8;"></p>
+                </div>
+                <div class="market-visual"><img class="target-img" src="" alt="Premium"></div>
+            </section>
+
+            <section class="market-section market-mass" id="donut-case-donut4">
+                <div class="market-visual"><img class="target-img" src="" alt="Mass"></div>
+                <div class="market-text">
+                    <h2 class="section-title target-title">04 / 低價市場</h2>
+                    <p class="target-desc" style="opacity: 0.8; margin-top: 1rem; line-height: 1.8;"></p>
+                </div>
+            </section>
+
+            <div class="lab-footer">
+                <button class="cta-btn" onclick="switchPage('booking')">
+                    <span class="lang-zh">馬上開啟您的品牌藍圖 →</span><span class="lang-en">Start Your Brand Blueprint →</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="booking" class="page">
+        <div class="booking-container" style="align-items: center;">
+            <div class="booking-left">
+                <h2 id="text-booking_title"></h2>
+                <p id="text-booking_desc" style="opacity: 0.6; margin-bottom: 2.5rem;"></p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="親自分享如何打造品牌" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="booking-right">
+                <span style="font-family: var(--font-serif); color: var(--accent-gold); font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 1rem;">BOOKING CLINIC</span>
+                <h3 style="font-family: var(--font-serif); font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 1.5rem; line-height: 1.5;" class="lang-zh">預約您的品牌門診</h3>
+                <h3 style="font-family: var(--font-serif); font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 1.5rem; line-height: 1.5;" class="lang-en">Book Your Consultation</h3>
+                <p style="font-size: 0.9rem; opacity: 0.6; line-height: 1.8; max-width: 320px;" class="lang-zh">為了提供最精準的三維度診斷，我們採用 Google 表單收集您的初步品牌資訊。填寫約需 3-5 分鐘。</p>
+                <p style="font-size: 0.9rem; opacity: 0.6; line-height: 1.8; max-width: 320px;" class="lang-en">To provide a precise diagnosis, we use Google Forms to collect data. Takes 3-5 mins.</p>
+                <a href="https://forms.google.com" target="_blank" class="submit-btn">
+                    <span class="lang-zh">開始填寫品牌問卷 →</span><span class="lang-en">Fill Out the Form →</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SPREADSHEET_ID = '159XP5OjDie2kuOYhbVyNXLk-CofaH8InNrRPzFPZQ4g';
+        let currentLang = 'zh';
+        let portfolioRawData = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGoogleSheetsData();
+        });
+
+        async function loadGoogleSheetsData() {
+            try {
+                const urlText = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Text`;
+                const urlPortfolio = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Portfolio`;
+
+                const [resText, resPortfolio] = await Promise.all([
+                    fetch(urlText).then(r => r.text()),
+                    fetch(urlPortfolio).then(r => r.text())
+                ]);
+
+                parseAndApplyText(resText);
+                parseAndApplyPortfolio(resPortfolio);
+
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            } catch (error) {
+                console.error("資料載入失敗:", error);
+                document.getElementById('loader').innerText = "ERROR LOADING DATA. PLEASE CHECK SHEET.";
+            }
+        }
+
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            return lines.slice(1).map(line => {
+                const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+                return matches.map(val => val.replace(/^"|"$/g, '').trim());
+            }).filter(row => row.length > 0);
+        }
+
+        function parseAndApplyText(csvData) {
+            const rows = parseCSV(csvData);
+            rows.forEach(row => {
+                const [id, zh, en] = row;
+                
+                if (id === 'logo_url') {
+                    const txtNode = document.getElementById('logo-text-node');
+                    const imgNode = document.getElementById('logo-img-node');
+                    if (zh && (zh.startsWith('http://') || zh.startsWith('https://'))) {
+                        txtNode.style.display = 'none';
+                        imgNode.src = zh;
+                        imgNode.style.display = 'block';
+                    } else if (zh) {
+                        imgNode.style.display = 'none';
+                        txtNode.innerText = zh;
+                        txtNode.style.display = 'block';
+                    }
+                    return;
+                }
+
+                const element = document.getElementById(`text-${id}`);
+                if (element) {
+                    if (id.startsWith('dim_product') || id.startsWith('dim_promotion') || id.startsWith('dim_brand')) {
+                        const listZh = zh.split(/[；，分;]/).map(item => item.trim()).filter(i => i).map(i => `<li>${i}</li>`).join('');
+                        const listEn = en.split(/[；，分;]/).map(item => item.trim()).filter(i => i).map(i => `<li>${i}</li>`).join('');
+                        element.innerHTML = `<ul class="lang-zh">${listZh}</ul><ul class="lang-en">${listEn}</ul>`;
+                    } else {
+                        element.innerHTML = `<span class="lang-zh">${zh}</span><span class="lang-en">${en}</span>`;
+                    }
+                }
+            });
+        }
+
+        function parseAndApplyPortfolio(csvData) {
+            const rows = parseCSV(csvData);
+            portfolioRawData = rows;
+            const grid = document.getElementById('dynamic-portfolio-grid');
+            grid.innerHTML = ''; 
+
+            rows.forEach((row, index) => {
+                const [type, image, titleZh, titleEn, descZh, descEn, heroImage, detailZh, detailEn] = row;
+
+                if (type === 'real') {
+                    const item = document.createElement('div');
+                    item.className = 'portfolio-item';
+                    item.onclick = () => openProjectDetail(index);
+                    item.innerHTML = `
+                        <div class="image-wrapper"><img class="portfolio-img" src="${image}" alt="Portfolio"></div>
+                        <div class="item-info">
+                            <h3><span class="lang-zh">${titleZh}</span><span class="lang-en">${titleEn}</span></h3>
+                            <p><span class="lang-zh">${descZh}</span><span class="lang-en">${descEn}</span></p>
+                        </div>
+                    `;
+                    grid.appendChild(item);
+                } else if (type.startsWith('donut')) {
+                    const section = document.getElementById(`donut-case-${type}`);
+                    if (section) {
+                        section.querySelector('.target-title').innerHTML = `<span class="lang-zh">${titleZh}</span><span class="lang-en">${titleEn}</span>`;
+                        section.querySelector('.target-desc').innerHTML = `<span class="lang-zh">${descZh}</span><span class="lang-en">${descEn}</span>`;
+                        section.querySelector('.target-img').src = image;
+                    }
+                }
+            });
+        }
+
+        function openProjectDetail(index) {
+            const row = portfolioRawData[index];
+            const [type, image, titleZh, titleEn, descZh, descEn, heroImage, detailZh, detailEn] = row;
+
+            document.getElementById('detail-hero-img').src = heroImage || image;
+            document.getElementById('detail-title').innerHTML = `<span class="lang-zh">${titleZh}</span><span class="lang-en">${titleEn}</span>`;
+            document.getElementById('detail-tags').innerHTML = `<span class="lang-zh">${descZh}</span><span class="lang-en">${descEn}</span>`;
+            document.getElementById('detail-text').innerHTML = `<span class="lang-zh">${detailZh}</span><span class="lang-en">${detailEn}</span>`;
+
+            switchPage('project-detail');
+        }
+
+        function toggleLanguage() {
+            const body = document.body;
+            const btn = document.querySelector('.lang-switch');
+            if (currentLang === 'zh') {
+                body.classList.add('lang-en');
+                btn.innerText = 'ZH';
+                currentLang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                btn.innerText = 'EN';
+                currentLang = 'zh';
+            }
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-links span').forEach(link => link.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) targetPage.classList.add('active');
+            
+            const targetLink = document.getElementById('link-' + pageId);
+            if (targetLink) targetLink.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 優化背景微互動：在行動裝置（觸控螢幕）上自動關閉滑鼠跟隨，增進滑動流暢度
+        const decoration = document.querySelector('.bg-decoration');
+        if (window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                const x = (e.clientX - window.innerWidth/2) * 0.05;
+                const y = (e.clientY - window.innerHeight/2) * 0.05;
+                decoration.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        }
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
